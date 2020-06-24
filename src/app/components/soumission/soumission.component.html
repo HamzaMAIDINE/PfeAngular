@@ -1,0 +1,67 @@
+<p-menubar [model]="items"></p-menubar>
+
+<p-table #dtao  [value]="soumissions" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="caption">
+            <div style="text-align: center">        
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="rechercher" (input)="dtao.filterGlobal($event.target.value, 'contains')" style="width:200px">
+            </div>
+    </ng-template>
+    <ng-template pTemplate="header" >
+        <tr>
+            <th style="width: -5vw"> code </th> 
+            <th> prix</th> 
+            <th> qte</th> 
+            <th> designation d'ouvrage</th> 
+            <th> Date </th> 
+            <th>appel_offre </th> 
+             <th style="width:5em"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-s let-ri="rowIndex" >
+        <tr style="text-align: center">
+                <td>{{ s[0] }} </td> 
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] }}</td>
+                <td>{{ s[3] }}</td>
+                <td>{{ s[4] | date}}</td>
+                <td>{{ s[5] }}</td>            
+            <td *ngIf="isAdmin()">
+                <!-- <button pButton class="btn btn-sm btn-warning" > <i class="fa fa-pencil"></i>  </button> -->
+                <button pButton class="btn btn-sm btn-danger" (click)="deleteSoumission(s[0], s[5])" > <i class="fa fa-trash"></i>  </button>
+            </td>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+    </ng-template>    
+</p-table> 
+
+<p-dialog header="Ajouter Soumission " [(visible)]="displaySoumission" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+  <div class="form-group">
+        <label for="appelOffreId">appel d'offre</label>
+        <select class="form-control" name="appelOffreId" id="appelOffreId" [(ngModel)]="appelOffreId">
+            <option value="{{a.numAO}}" *ngFor="let a of appelOffres"> {{ a.numAO }} </option>
+        </select>
+</div>
+
+<div class="form-group">
+         <label for="prix"> Prix  </label>
+         <input type="number" class="form-control" name="prix" id="prix" [(ngModel)]="prix">
+  </div>
+
+<div class="form-group">
+        <label for="qte"> Quantite </label>
+        <input type="number" class="form-control" name="qte" id="qte" [(ngModel)]="qte">
+</div>
+
+<div class="form-group">
+        <label for="ouvrageId">Ouvrage </label>
+        <select class="form-control" name="ouvrageId" id="ouvrageId" [(ngModel)]="ouvrageId">
+            <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }}  </option>
+        </select>
+</div>
+<p-footer>
+        <button type="button" pButton class="btn btn-primary " (click)="addSoumission()" > <i class="fa fa-plus"></i> </button>
+        <button type="button" pButton class="btn btn-danger " (click)="displaySoumission=false"> <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>

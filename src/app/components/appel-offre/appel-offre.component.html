@@ -1,0 +1,107 @@
+<p-menubar [model]="items" >
+        <button  pButton label="Logout" class="btn btn-primary btn-sm" (click)="refresh()" style="margin-left:.25em">
+                <i class="fa fa-refresh" ></i>
+         </button>
+</p-menubar>
+
+
+<p-table #dtao [columns]="cols" [value]="appelOffres" [responsive]="true" (onRowSelect)="onRowSelect($event)"
+ selectionMode="single" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="caption">
+            <div style="text-align: center">
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="rechercher" (input)="dtao.filterGlobal($event.target.value, 'contains')" style="width:200px">
+            </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width:5em"></th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+            <th style="width:5em"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-ri="rowIndex" let-columns="columns">
+        <tr [pSelectableRow]="rowData" style="text-align: center">
+                <td style="width:5em"> </td>
+            <td>{{ rowData.numAO }}</td>
+            <td>{{ rowData.objet }}</td>
+            <td>{{ rowData.dateAO | date  }}</td>
+            <td>{{ rowData.localisation }}</td>
+            <td>{{ rowData.estimation | number }}</td>
+            <td *ngIf="isAdmin()">
+                <button pButton class="btn btn-sm btn-warning" (click)="editAppelOffre(rowData)"> <i class="fa fa-pencil"></i>  </button>
+                <button pButton class="btn btn-sm btn-danger"
+                        mwlConfirmationPopover
+                        [popoverTitle]="popOverTitle"
+                        [popoverMessage]="popOverMessage"
+                        (confirm)="deleteAppelOffre(rowData.numAO)"
+                        (cancel)="cancelClicked = true"
+                        placement="left"> <i class="fa fa-trash"></i>  </button>
+
+            </td>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+    </ng-template>
+</p-table>
+
+<p-dialog header="Ajouter Appel Offre " [(visible)]="displayappelOff" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+      <div class="form-group">
+        <label for="numAO"> numero d'Appel d'offre </label>
+        <input type="text" name="numAO" id="numAO" [(ngModel)]="appelOff.numAO" class="form-control">
+      </div>
+
+      <div class="form-group">
+          <label for="objet">objet</label>
+          <textarea class="form-control" name="objet" id="objet" [(ngModel)]="appelOff.objet" rows="3"></textarea>
+       </div>
+
+      <div class="form-group">
+             <label for="localisation"> localisation </label>
+             <input type="text" name="localisation" id="localisation" [(ngModel)]="appelOff.localisation" class="form-control">
+      </div>
+
+      <div class="form-group">
+             <label for="estimation"> estimation </label>
+             <input type="number" name="estimation" id="estimation" [(ngModel)]="appelOff.estimation" class="form-control">
+      </div>
+
+      <p-footer>
+        <button type="button" pButton class="btn btn-primary " (click)="AddAppelOff()" > <i class="fa fa-plus"></i> </button>
+        <button type="button" pButton class="btn btn-danger " (click)="displayappelOff=false"  > <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Editer Appel Offre " [(visible)]="displayAppelOffreEdit" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+      <div class="form-group">
+        <label for="numAO"> numero d'Appel d'offre </label>
+        <input type="text" name="numAO" id="numAO" [(ngModel)]="appelOff.numAO" class="form-control" readonly="readonly">
+      </div>
+
+      <div class="form-group">
+          <label for="objet">objet</label>
+          <textarea class="form-control" name="objet" id="objet" [(ngModel)]="appelOff.objet" rows="3"></textarea>
+       </div>
+
+      <div class="form-group">
+             <label for="localisation"> localisation </label>
+             <input type="text" name="localisation" id="localisation" [(ngModel)]="appelOff.localisation" class="form-control">
+      </div>
+
+      <div class="form-group">
+             <label for="estimation"> estimation </label>
+             <input type="number" name="estimation" id="estimation" [(ngModel)]="appelOff.estimation" class="form-control">
+      </div>
+
+      <p-footer>
+        <button type="button" pButton class="btn btn-warning" (click)="updateAppelOffre()" > <i class="fa fa-plus"></i> </button>
+        <button type="button" pButton class="btn btn-danger " (click)="displayAppelOffreEdit=false"  > <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>

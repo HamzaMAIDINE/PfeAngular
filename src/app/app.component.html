@@ -1,0 +1,27 @@
+                      <!-- main nav  -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <!-- <a >Logo</a> -->
+    <img src="assets/logo.ico" class="navbar-brand clickable" alt="logo"  routerLink="/" width="80px" height="70px">
+          <!-- assets/images/icons/ouvrages.png -->
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+        aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <!-- <a  routerLink="/admin/dashboard" class="btn btn-primary btn-sm" *ngIf="isAdmin()" >{{ username }} <i class="fa fa-user" ></i></a> -->
+        </li>
+      </ul>
+       <div class="nav nav-navbar pull-right">
+               <a  routerLink="/login" class="btn btn-primary btn-sm" *ngIf="!isAuth()" > login <i class="fa fa-sign-in" ></i></a>
+               <button class="btn btn-sm btn-danger"  *ngIf="isAuth()" (click)="logout()">logout <i class="fa fa-sign-out" ></i></button>
+               <button routerLink="/register" class="btn btn-sm btn-warning" *ngIf="!isAuth()"> <i class="fa fa-lock" ></i>  register</button>
+       </div>
+    </div>
+  </nav>
+
+<div class="container">
+    <router-outlet></router-outlet> 
+</div>
+  

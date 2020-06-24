@@ -1,0 +1,198 @@
+<p-menubar [model]="items" ></p-menubar>
+
+    <p-accordion>
+        <p-accordionTab  header="Engin Intern">
+               <table class="table table-striped table-hover">
+                   <thead>
+                       <tr>
+                           <th>designation</th>
+                           <th>caracteristiques</th>
+                           <th>prix Location</th>
+                           <th>prix Achat</th>
+                           <th>consommationH </th>
+                           <th *ngIf="isAdmin()">Actions </th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       <tr *ngFor="let enginIn of enginsIntern">
+                           <td> {{ enginIn.designation }} </td>
+                           <td> {{ enginIn.caracteristiques }} </td>
+                           <td> {{ enginIn.prixLocation }} </td>
+                           <td> {{ enginIn.prixAchat }} </td>
+                           <td> {{ enginIn.consommationH }} </td>
+                           <td *ngIf="isAdmin()">
+                                <button pButton class="btn btn-sm btn-warning" (click)="EditEngin(enginIn)" > <i class="fa fa-pencil" ></i></button>
+                                <button pButton class="btn btn-sm btn-danger"
+                                        mwlConfirmationPopover
+                                        [popoverTitle]="popOverTitle"
+                                        [popoverMessage]="popOverMessage"
+                                        (confirm)="deleteParc(enginIn.idEngin)"
+                                        (cancel)="cancelClicked = true"
+                                        placement="left"> <i class="fa fa-trash" ></i></button>
+                            </td>
+                       </tr>
+                   </tbody>
+               </table>
+       </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion>
+        <p-accordionTab  header="Engin Externe">
+               <table class="table  table-striped table-hover">
+                   <thead>
+                       <tr>
+                           <th>designation</th>
+                           <th>caracteristiques</th>
+                           <th>prix Location</th>
+                           <th>consommationH </th>
+                           <th *ngIf="isAdmin()" >Actions </th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       <tr *ngFor="let enginEx of enginsExterne">
+                           <td> {{ enginEx.designation }} </td>
+                           <td> {{ enginEx.caracteristiques }} </td>
+                           <td> {{ enginEx.prixLocation }} </td>
+                           <td> {{ enginEx.consommationH }} </td>
+                           <td *ngIf="isAdmin()" >
+                                <button pButton class="btn btn-sm btn-warning" (click)="EditEngin(enginEx)" > <i class="fa fa-pencil" ></i></button>
+                                <button pButton class="btn btn-sm btn-danger" (click)="deleteParc(enginEx.idEngin)"> <i class="fa fa-trash" ></i></button>
+                            </td>
+                       </tr>
+                   </tbody>
+               </table>
+       </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion>
+        <p-accordionTab  header="Engin Vehicule">
+               <table class="table  table-striped table-hover">
+                   <thead>
+                       <tr>
+                           <th>designation</th>
+                           <th>caracteristiques</th>
+                           <th *ngIf="isAdmin()" >Actions</th>
+                         </tr>
+                   </thead>
+                   <tbody>
+                       <tr *ngFor="let enginV of enginsVehicule">
+                           <td> {{ enginV.designation }} </td>
+                           <td> {{ enginV.caracteristiques }} </td>
+                           <td *ngIf="isAdmin()" >
+                                <button pButton class="btn btn-sm btn-warning" (click)="EditEngin(enginV)" > <i class="fa fa-pencil" ></i></button>
+                                <button pButton class="btn btn-sm btn-danger" (click)="deleteParc(enginV.idEngin)"> <i class="fa fa-trash" ></i></button>
+                            </td>
+                        </tr>
+                   </tbody>
+               </table>
+       </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion>
+        <p-accordionTab  header="Engin Camion">
+               <table class="table  table-striped table-hover">
+                   <thead>
+                       <tr>
+                           <th>designation</th>
+                           <th>caracteristiques</th>
+                           <th>capacite</th>
+                           <th>prix Location</th>
+                           <th *ngIf="isAdmin()" >Actions</th>
+                         </tr>
+                   </thead>
+                   <tbody>
+                       <tr *ngFor="let enginC of enginsCamion">
+                           <td> {{ enginC.designation }} </td>
+                           <td> {{ enginC.caracteristiques }} </td>
+                           <td> {{ enginC.poids }} </td>
+                           <td> {{ enginC.prixLocation }} </td>
+                           <td *ngIf="isAdmin()" >
+                                <button pButton class="btn btn-sm btn-warning" (click)="EditEngin(enginC)" > <i class="fa fa-pencil" ></i></button>
+                                <button pButton class="btn btn-sm btn-danger" (click)="deleteParc(enginC.idEngin)"> <i class="fa fa-trash" ></i></button>
+                            </td>
+                        </tr>
+                   </tbody>
+               </table>
+       </p-accordionTab>
+    </p-accordion>
+
+    <p-dialog header="Ajouter Engin " [(visible)]="displayEngin" [modal]="true"  [style]="{width: '50vw',height: '100vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="type" >select Type de parc </label>
+            <select class="form-control" name="type"  id="type" [(ngModel)]="engin.type" (change)="selectTypeEngin()">
+              <option value="interne">Interne </option>
+              <option value="externe">Externe </option>
+              <option value="camion">Camion </option>
+              <option value="vehicule">Vehicule </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="designation"> designation </label>
+            <input type="text" name="designation" id="designation" [(ngModel)]="engin.designation" class="form-control">
+          </div>
+           <div class="form-group">
+             <label for="caracteristique"> Caracteristiques </label>
+             <textarea class="form-control" name="caracteristique" id="caracteristique" [(ngModel)]="engin.caracteristiques" rows="3"></textarea>
+           </div>
+             <div *ngIf="!showFiledsByType.displayEnginVehicule" class="form-group">
+                <label for="prixLocation">prix Location </label>
+                <input type="number" name="prixLocation" id="prixLocation" [(ngModel)]="engin.prixLocation" class="form-control">
+              </div>
+              <div *ngIf="showFiledsByType.displayEnginInterne || showFiledsByType.displayEnginExterne"  class="form-group">
+                    <label for="consommationH">consommation  </label>
+                    <input type="number" name="consommationH" id="consommationH" [(ngModel)]="engin.consommationH" class="form-control">
+                  </div>
+
+              <div *ngIf="showFiledsByType.displayEnginVehicule || showFiledsByType.displayEnginInterne" class="form-group">
+                  <label for="prixAchat"> prix Achat</label>
+                  <input type="number" name="prixAchat" id="prixAchat" [(ngModel)]="engin.prixAchat" class="form-control">
+                </div>
+
+                <div *ngIf="showFiledsByType.displayEnginCamion"  class="form-group">
+                        <label for="poids"> poids </label>
+                        <input type="number" name="poids" id="poids" [(ngModel)]="engin.poids" class="form-control">
+                      </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)="AddEngin()" > <i class="fa fa-plus"></i>  </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayEngin=false"> <i class="fa fa-times"></i>  </button>
+        </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Editer Engin " [(visible)]="displayEnginEdit" [modal]="true"  [style]="{width: '50vw',height: '100vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+      <div class="form-group">
+        <label for="designation"> designation </label>
+        <input type="text" name="designation" id="designation" [(ngModel)]="engin.designation" class="form-control">
+      </div>
+       <div class="form-group">
+         <label for="caracteristique"> Caracteristiques </label>
+         <textarea class="form-control" name="caracteristique" id="caracteristique" [(ngModel)]="engin.caracteristiques" rows="3"></textarea>
+       </div>
+         <div *ngIf="!showFiledsByType.displayEnginVehicule" class="form-group">
+            <label for="prixLocation">prix Location </label>
+            <input type="number" name="prixLocation" id="prixLocation" [(ngModel)]="engin.prixLocation" class="form-control">
+          </div>
+          <div *ngIf="showFiledsByType.displayEnginInterne || showFiledsByType.displayEnginExterne"  class="form-group">
+                <label for="consommationH">consommation  </label>
+                <input type="number" name="consommationH" id="consommationH" [(ngModel)]="engin.consommationH" class="form-control">
+              </div>
+
+          <div *ngIf="showFiledsByType.displayEnginVehicule || showFiledsByType.displayEnginInterne" class="form-group">
+              <label for="prixAchat"> prix Achat</label>
+              <input type="number" name="prixAchat" id="prixAchat" [(ngModel)]="engin.prixAchat" class="form-control">
+            </div>
+
+            <div *ngIf="showFiledsByType.displayEnginCamion"  class="form-group">
+                    <label for="poids"> poids </label>
+                    <input type="number" name="poids" id="poids" [(ngModel)]="engin.poids" class="form-control">
+                  </div>
+      <p-footer>
+        <button type="button" pButton class="btn btn-warning " (click)="updateEngin()" > <i class="fa fa-pencil"></i>  </button>
+        <button type="button" pButton class="btn btn-danger " (click)="displayEnginEdit=false"> <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>

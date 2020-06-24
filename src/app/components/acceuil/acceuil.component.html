@@ -1,0 +1,34 @@
+<!-- <div class="container">
+        <div class="row m-5">
+            <div [routerLink]="[ '/ouvrage']" class="blue col-md-3 text-center clickable " style="margin-right: 10px" ><span>Ouvrages</span></div>
+            <div [routerLink]="[ '/peronnel']" class="blue col-md-3 text-center clickable " style="margin-right: 10px" ><span>Personnels</span></div>
+            <div [routerLink]="[ '/parc']" class="blue col-md-2 text-center clickable " style="margin-right: 10px" ><span>Parc</span></div>
+            <div [routerLink]="[ '/materiel']" class="blue col-md-3 text-center clickable " style="margin-right: 0px" ><span>Materiaux</span></div>
+        </div>
+          <div class="row m-5"> 
+            <div [routerLink]="[ '/appelOffre']" class="col-md-3 blue text-center clickable " style="margin-right: 10px"><span>Appel offre</span></div>
+            <div [routerLink]="[ '/etudeprix']" class="col-md-3 blue text-center clickable " style="margin-right: 10px"><span>ajouter une etude prix</span></div>
+            <div [routerLink]="[ '/soumission']" class="col-md-2 blue text-center clickable " style="margin-right: 10px"><span>ajouter un soumission</span></div>
+            <div [routerLink]="[ '/chantier']" class="col-md-3 blue text-center clickable " style="margin-right: 0px"><span>chantier</span></div>
+        </div>
+         <div class="row m-5">
+            <div [routerLink]="[ '/reparation']" class="col-md-3 blue text-center clickable " style="margin-right: 10px"><span>ajouter une reparation</span></div>
+            <div [routerLink]="[ '/entretien']" class="col-md-3 blue text-center clickable " style="margin-right: 10px"><span>ajouter un entretien</span></div>
+            <div [routerLink]="[ '/decompte']" class="col-md-2 blue text-center clickable " style="margin-right: 10px"><span>ajouter un decompte</span></div>
+            <div [routerLink]="[ '/achatmateriel']" class="col-md-3 blue text-center clickable " style="margin-right: 0px"><span>ajoute un achat de materiel</span></div>
+        </div>   
+</div>  -->
+
+<div class="grid-container">
+  <h1 class="mat-h1"></h1>
+  <div class="wrapper">
+    <div *ngFor="let itemMenu of items" [routerLink]="itemMenu.a" (click)="itemMenu.action()">
+      <img [src]="itemMenu.src" alt="">
+      <h4>{{ itemMenu.des }}</h4>
+    </div>
+  </div>
+</div>
+ 
+
+
+<router-outlet></router-outlet>

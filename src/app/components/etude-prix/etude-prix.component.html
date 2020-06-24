@@ -1,0 +1,129 @@
+
+      <p-menubar [model]="items" *ngIf="allEtudesPricesDialog" class="mt-5">
+            <button  pButton label="Logout" class="btn btn-primary btn-sm" (click)="showMainForm()" style="margin-left:.25em">
+             <i class="fa fa-eye" ></i>
+            </button> 
+      </p-menubar>
+
+<div *ngIf="etudesPricesDialog" class="mt-5">
+<p-table #dtm [value]="etudesPrices" [columns]="cols" [resizableColumns]="true" 
+                scrollHeight="200px" [scrollable]="true" [responsive]="true" class="mt-5">
+            <ng-template pTemplate="header">
+                   <tr>
+                     <!-- <th style="width: 5em"></th> -->
+                     <th>rendement</th>
+                     <th>foisonnement</th>
+                     <th>distance</th>
+                     <th>salaireChefEquipe </th>
+                      <th>salaireOuvrier</th>
+                      <th>nbrOuvrier</th>
+                      
+                   </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-i="rowIndex" let-o>
+                   <tr>
+                     <!-- <td > {{ o.idET }} </td> -->
+                      <td> {{ o.rendement | number }}  </td> 
+                       <td> {{ o.foisonnement | number  }}</td>
+                       <td> {{ o.distance | number  }}</td>
+                       <td> {{ o.salaireChefEquipe | number  }}</td>
+                       <td> {{ o.salaireOuvrier | number  }}</td>
+                       <td> {{ o.nbrOuvrier  }}</td>    
+                     <!-- <td style="width: 10em"> -->
+                         <!-- <button class="btn btn-sm btn-danger"  > <i class="fa fa-trash"></i></button> -->
+                     <!-- </td> -->
+                   </tr>
+            </ng-template>
+ </p-table>
+</div>
+
+<!-- all etude prices : appelOFFREiD =NULL -->
+<div *ngIf="allEtudesPricesDialog" class="mt-5">
+ <p-table #dtm [value]="allEtudesPrices" [columns]="cols" [resizableColumns]="true" 
+                scrollHeight="200px" [scrollable]="true" [responsive]="true" class="mt-5">
+            <ng-template pTemplate="header">
+                   <tr>
+                     <th>rendement</th>
+                     <th>foisonnement</th>
+                     <th>distance</th>
+                     <th>salaireChefEquipe </th>
+                      <th>salaireOuvrier</th>
+                      <th>nbrOuvrier</th>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-i="rowIndex" let-o>
+                   <tr>
+                     <!-- <td > {{ o[0] }} </td> -->
+                      <td> {{ o[1] | number }}  </td> 
+                       <td> {{ o[2] | number  }}</td>
+                       <td> {{ o[3] | number  }}</td>
+                       <td> {{ o[4] | number  }}</td>
+                       <td> {{ o[5] | number  }}</td>
+                       <td> {{ o[6]  }}</td>    
+                     <!-- <td style="width: 10em">
+                           <button class="btn btn-sm btn-danger"  > <i class="fa fa-trash"></i></button> - 
+                     </td> -->
+                   </tr>
+            </ng-template>
+ </p-table>
+</div>
+
+<!-- add etude price  -->
+
+  <p-dialog header="Ajouter Etude de Prix " [(visible)]="etudePrixDialog" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+        [draggable]="false" [resizable]="false">
+   
+        <div class="form-group">
+               <label for="rendement"> rendement </label>
+               <input type="number" name="rendement" id="rendement" [(ngModel)]="etudePrix.rendement" class="form-control">
+        </div>
+        <div class="form-group">
+               <label for="foisonnement">foisonnement</label>
+               <input type="number" name="foisonnement" id="foisonnement" [(ngModel)]="etudePrix.foisonnement" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="distance">distance </label>
+               <input type="number" name="distance" id="distance" [(ngModel)]="etudePrix.distance" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="salaireChefEquipe"> salaire Chef Equipe </label>
+               <input type="number" name="salaireChefEquipe" id="salaireChefEquipe" [(ngModel)]="etudePrix.salaireChefEquipe" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="salaireOuvrier"> salaire Ouvrier </label>
+               <input type="number" name="salaireOuvrier" id="salaireOuvrier" [(ngModel)]="etudePrix.salaireOuvrier" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="nbrOuvrier"> nbrOuvrier </label>
+            <input type="number" name="nbrOuvrier" id="nbrOuvrier" [(ngModel)]="etudePrix.nbrOuvrier" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="enginCamion">select Camion</label>
+          <select class="form-control" name="enginCamion" id="enginCamion" [(ngModel)]="enginCamionId">
+            <option value="{{e.idEngin}}" *ngFor="let e of enginCamion"> {{ e.designation }} </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ouvrage">select Ouvrage</label>
+            <select class="form-control" name="ouvrage" id="ouvrage" [(ngModel)]="ouvrageId" >
+              <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }} </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+          <label for="idAppelOffre">select appel Offre</label>
+          <select class="form-control" name="idAppelOffre" id="idAppelOffre" [(ngModel)]="idAppelOffre" >
+            <option value="{{a.numAO}}" *ngFor="let a of appelOffres"> {{ a.numAO }} </option>
+          </select>
+      </div>
+        <p-footer>
+          <button type="button" pButton class="btn btn-primary " (click)="addEtudePrix()" > <i class="fa fa-plus"></i> </button>
+          <button type="button" pButton class="btn btn-danger " (click)="etudePrixDialog=false" > <i class="fa fa-times"></i>  </button>
+      </p-footer>
+    </p-dialog>

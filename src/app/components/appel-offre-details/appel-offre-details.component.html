@@ -1,0 +1,203 @@
+<p-menubar [model]="items" >
+  <button pButton label="Logout" class="btn btn-primary btn-sm" (click)="showMainForm()" style="margin-left:.25em">
+    <i class="fa fa-refresh"></i>
+</button> 
+</p-menubar>
+
+      <h3 class="first">Appel d'offre {{ appelOffre?.numAO }}</h3>
+   <div *ngIf="showMainFormDialog">
+    <p-tabView>
+
+          <p-tabPanel header="Details" leftIcon="pi pi-calendar">
+            <div class="info-text">
+                <div>Numero : <strong>{{ appelOffre?.numAO }}</strong></div>  
+                <div>Objet : <strong>{{ appelOffre?.objet }}</strong><br></div> 
+                <div>Date : <strong>{{ appelOffre?.dateAO | date }}</strong> <br></div> 
+                <div>Localisation : <strong>{{ appelOffre?.localisation }}</strong></div>
+                <div>Estimation : <strong>{{ appelOffre?.estimation }}</strong></div>
+            </div>
+        </p-tabPanel>
+        
+          <p-tabPanel header="Installation de chantier" leftIcon="pi pi-inbox">
+            <p-table #dtm [value]="installationChantierByAppelOffres" [columns]="cols" [resizableColumns]="true" 
+            scrollHeight="380px" [scrollable]="true" [responsive]="true" class="mt-5">
+             <ng-template pTemplate="header">
+               <tr>
+                 <th style="width: 5em"></th>
+                 <th>Designation</th>
+                 <th>montant</th>
+               </tr>
+             </ng-template>
+             <ng-template pTemplate="body" let-i="rowIndex" let-ic>
+               <tr>
+                 <td style="width: 5em">{{ ic.idIC }} </td>
+                 <td >{{ ic.designation }} </td> 
+                 <td> {{ ic.montant  }} </td>
+               </tr>
+             </ng-template>
+             <ng-template pTemplate="footer">
+             </ng-template>
+             <ng-template pTemplate="summary" class="text-primary">
+                    <tr>
+                         <th colspan="2">Totale :</th>
+                         <th style="width: 50em">
+                         <th colspan="10">{{ getTotalInsC() }}</th>
+                    </tr>
+             </ng-template>
+           </p-table>
+        </p-tabPanel>
+
+          <p-tabPanel header="Table Bord" leftIcon="pi pi-user" rightIcon="pi pi-star">
+                <p-table #dtm [value]="tableBord" [columns]="cols2" [resizableColumns]="true" 
+                scrollHeight="380px" [scrollable]="true" [responsive]="true" class="mt-5">
+                 <ng-template pTemplate="header">
+                   <tr>
+                     <th style="width: 5em"></th>
+                     <th>Designation</th>
+                     <th>Unite</th>
+                     <th>Quantite</th>
+                     <th>Prix </th>
+                      <th>Total</th>
+                      <th style="width: 5em"></th>
+                   </tr>
+                 </ng-template>
+                 <ng-template pTemplate="body" let-i="rowIndex" let-o>
+                   <tr>
+                     <td style="width: 5em"> </td>
+                       <td> {{ o[1]  }}</td> 
+                       <td> {{ o[2]  }}</td>
+                       <td> {{ o[3]  | number }}</td>
+                       <td> {{ o[4]  | number }}</td>
+                       <td> {{ o[5]  | number }}</td>
+    
+                     <td style="width: 10em">
+                         <!-- <button class="btn btn-sm btn-danger"  > <i class="fa fa-trash"></i></button> -->
+                     </td>
+                   </tr>
+                 </ng-template>
+                 <ng-template pTemplate="footer">
+                 </ng-template>
+                 <ng-template pTemplate="summary" class="text-primary">
+                        <tr>
+                                <th colspan="2">Totale :</th>
+                                <th style="width: 50em"></th> 
+                                <th colspan="10"> {{ getTotalArticles()  | number}} </th>
+                        </tr>   
+                        <tr>
+                                <th colspan="2">Tva : 20%</th>
+                                <th style="width: 50em"></th> 
+                                <th colspan="10"> {{ getTotaTVA() | number }} </th>
+                       </tr> 
+                       <tr>
+                                <th colspan="2">Total</th>
+                                <th style="width: 50em"></th> 
+                                <th colspan="10"> {{ getTotalWithTVA() | number }} </th>
+                        </tr>   
+                  
+                 </ng-template>
+               </p-table>
+        </p-tabPanel>
+
+          <p-tabPanel header="Etude Price" leftIcon="pi pi-user" rightIcon="pi pi-star">
+          <app-etude-prix [appelOffreId] ="idAppelOffre"></app-etude-prix> 
+
+        </p-tabPanel>
+
+    </p-tabView>
+  </div>
+  
+      <p-dialog header="instalation chantier" [(visible)]="instalationChantierDialog" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+      [draggable]="false" [resizable]="false">
+       
+            <div class="form-group">
+                   <label for="designation"> designation </label>
+                   <input type="text" name="designation" id="designation" [(ngModel)]="instalationChantier.designation" class="form-control">
+            </div>
+            <div class="form-group">
+                   <label for="montant"> montant </label>
+                   <input type="number" name="montant" id="montant" [(ngModel)]="instalationChantier.montant" class="form-control">
+            </div>    
+    
+            <p-footer>
+              <button type="button" pButton class="btn btn-primary " (click)="AddInstalationChantier()" > <i class="fa fa-plus"></i> </button>
+              <button type="button" pButton class="btn btn-danger " (click)="instalationChantierDialog=false"  > <i class="fa fa-times"></i>  </button>
+          </p-footer>
+    </p-dialog>
+
+    <!-- etude prix  -->
+      <p-dialog header="Ajouter Etude de Prix " [(visible)]="etudePrixDialog" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+        [draggable]="false" [resizable]="false">
+   
+        <div class="form-group">
+               <label for="rendement"> rendement </label>
+               <input type="number" name="rendement" id="rendement" [(ngModel)]="etudePrix.rendement" class="form-control">
+        </div>
+        <div class="form-group">
+               <label for="foisonnement">foisonnement</label>
+               <input type="number" name="foisonnement" id="foisonnement" [(ngModel)]="etudePrix.foisonnement" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="distance">distance </label>
+               <input type="number" name="distance" id="distance" [(ngModel)]="etudePrix.distance" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="salaireChefEquipe"> salaire Chef Equipe </label>
+               <input type="number" name="salaireChefEquipe" id="salaireChefEquipe" [(ngModel)]="etudePrix.salaireChefEquipe" class="form-control">
+        </div>
+
+        <div class="form-group">
+               <label for="salaireOuvrier"> salaire Ouvrier </label>
+               <input type="number" name="salaireOuvrier" id="salaireOuvrier" [(ngModel)]="etudePrix.salaireOuvrier" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="nbrOuvrier"> nbrOuvrier </label>
+            <input type="number" name="nbrOuvrier" id="nbrOuvrier" [(ngModel)]="etudePrix.nbrOuvrier" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="enginCamion">select Camion</label>
+          <select class="form-control" name="enginCamion" id="enginCamion" [(ngModel)]="enginCamionId">
+            <option value="{{e.idEngin}}" *ngFor="let e of enginCamion"> {{ e.designation }} </option>
+          </select>
+        </div>
+        <div class="form-group">
+            <label for="ouvrage">select Ouvrage</label>
+            <select class="form-control" name="ouvrage" id="ouvrage" [(ngModel)]="ouvrageId" >
+              <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }} </option>
+            </select>
+        </div>
+
+        <p-footer>
+          <button type="button" pButton class="btn btn-primary " (click)="addEtudePrix()" > <i class="fa fa-plus"></i> </button>
+          <button type="button" pButton class="btn btn-danger " (click)="etudePrixDialog=false" > <i class="fa fa-times"></i>  </button>
+      </p-footer>
+    </p-dialog>
+
+ <!-- add soumissionouvrage -->
+    <p-dialog header="Ajouter soumission " [(visible)]="SoumissionDialog" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+        [draggable]="false" [resizable]="false">
+   
+        <div class="form-group">
+               <label for="rendement"> prix </label>
+               <input type="number" name="rendement" id="rendement" [(ngModel)]="prix" class="form-control">
+        </div>
+        <div class="form-group">
+               <label for="quantite">quantite</label>
+               <input type="number" name="quantite" id="quantite" [(ngModel)]="qte" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="ouvrage">select Ouvrage</label>
+            <select class="form-control" name="ouvrage" id="ouvrage" [(ngModel)]="ouvrageID" >
+              <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }} </option>
+            </select>
+        </div>
+
+        <p-footer>
+          <button type="button" pButton class="btn btn-primary " (click)="addSoumissionOuvrage()" > <i class="fa fa-plus"></i> </button>
+          <button type="button" pButton class="btn btn-danger " (click)="SoumissionDialog=false"  > <i class="fa fa-times"></i>  </button>
+      </p-footer>
+</p-dialog>

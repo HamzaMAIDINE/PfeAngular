@@ -1,0 +1,39 @@
+<div class="mt-5">
+  <p-menubar [model]="items" ></p-menubar>
+</div>
+
+      <!-- <div class="form-group mt-5">
+        <label for="type">type de'achat </label>
+        <select class="form-control" name="type" id="type" [(ngModel)]="achatMatereil.type" >
+          <option value="achatChantier"> Achat materiel Chantier </option>
+          <option value="etEP"> Achat materiel Etude prix  </option>
+        </select>
+      </div> -->
+   
+      <div class="form-group">
+             <label for="prix"> prix </label>
+             <input type="number" name="prix" id="prix" [(ngModel)]="achatMatereil.prix" class="form-control">
+             <input type="hidden" value="achatChantier" name="achatChantier" id="achatChantier" [(ngModel)]="achatMatereil.type" class="form-control">
+      </div>
+
+      <div class="form-group">
+             <label for="qte"> qte </label>
+             <input type="number" name="qte" id="qte" [(ngModel)]="achatMatereil.qte" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="materielId">choisir le materiel </label>
+        <select class="form-control" name="materielId" id="materielId" [(ngModel)]="materielId">
+          <option value="{{m.idMateriel}}" *ngFor="let m of materiels" > {{m.designation}}  </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+            <label for="chantierId">choisir le Chantier </label>
+            <select class="form-control" name="chantierId" id="chantierId" [(ngModel)]="chantierId">
+              <option value="{{m[0]}}" *ngFor="let m of chantiers" > {{ m[0] }}  </option>
+            </select>
+      </div>
+ 
+        <button type="button" pButton class="btn btn-primary " (click)="addAchatMatereil()" > <i class="fa fa-plus"></i> </button>
+   

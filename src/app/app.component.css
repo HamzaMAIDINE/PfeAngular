@@ -1,0 +1,8 @@
+.blue{
+    background-color:dodgerblue;
+    width: 250px; 
+    height: 100px;
+}
+.clickable{
+    cursor: pointer;
+}

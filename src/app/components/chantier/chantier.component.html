@@ -1,0 +1,73 @@
+<p-menubar [model]="items"></p-menubar>
+
+<p-table #dtao [columns]="cols" [value]="chantiers" [responsive]="true" (onRowSelect)="onRowSelect($event)"
+ selectionMode="single" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="caption">
+            <div style="text-align: center">
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="rechercher" (input)="dtao.filterGlobal($event.target.value, 'contains')" style="width:200px">
+            </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: -5vw"> numCh</th>
+            <th> Date</th>
+            <th> Maitre Ouvrage</th>
+            <th> Estimation </th>
+            <th> etat </th>
+             <th style="width:5em"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-c let-ri="rowIndex" let-columns="columns">
+        <tr [pSelectableRow]="c" style="text-align: center">
+                <td>{{ c[0] }}</td>
+                <td>{{ c[1] }}</td>
+                <td>{{ c[2] }}</td>
+                <td>{{ c[3] | number}}</td>
+                <td >
+                    <ng-container *ngIf="c[4]=='fini'; else elseTemplate">
+                        <span class="badge badge-success"> fini <i class="fa fa-thumbs-up"></i> </span>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                            <span class="badge badge-warning"> en cours <i class="fa fa-thumbs-down"></i></span>
+                    </ng-template>
+
+                </td>
+
+            <td>
+                <button *ngIf="c[4]=='en_cours'" pButton (click)="finiChantier(c[0])" [ngClass]="{'btn-success': c[4]=='en_cours'}" class="btn btn-sm">
+                    <i class="fa fa-thumbs-up"></i>  </button>
+                <button pButton class="btn btn-sm btn-danger"
+                        mwlConfirmationPopover
+                        [popoverTitle]="popOverTitle"
+                        [popoverMessage]="popOverMessage"
+                        (confirm)="deleteChantier(c[0])"
+                        (cancel)="cancelClicked = true"
+                        placement="left"> <i class="fa fa-trash"></i>  </button>
+            </td>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+    </ng-template>
+</p-table>
+
+<p-dialog header="Ajouter Chantier " [(visible)]="displayChantier" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+      <div class="form-group">
+             <label for="numCh"> designation </label>
+             <input type="text" name="numCh" id="numCh" [(ngModel)]="chantier.numCh" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="appelOffre">select appel d'Offre</label>
+        <select class="form-control" name="appelOffre" id="appelOffre" [(ngModel)]="chantier.appelOffre">
+          <option value="{{a.numAO}}" *ngFor="let a of appelOffres"> {{ a.numAO }} </option>
+
+        </select>
+      </div>
+
+      <p-footer>
+        <button type="button" pButton class="btn btn-primary " (click)="AddChantier()" > <i class="fa fa-plus"></i> </button>
+        <button type="button" pButton class="btn btn-danger " (click)="displayChantier=false"> <i class="fa fa-times"></i>   </button>
+    </p-footer>
+</p-dialog>

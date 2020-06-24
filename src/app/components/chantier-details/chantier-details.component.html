@@ -1,0 +1,352 @@
+<p-menubar [model]="items">
+         <button  pButton label="Logout" class="btn btn-primary btn-sm" (click)="showMainForm()" style="margin-left:.25em">
+            <i class="fa fa-refresh"></i>
+        </button>
+ </p-menubar>
+
+
+ <p-dialog header="Affecter reparation " [(visible)]="shows.s1" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+        <div class="form-group">
+             <label for="designation">designation</label>
+             <input type="text" class="form-control" name="designation" id="designation" [(ngModel)]="reparation.designation">
+        </div>
+
+        <div class="form-group">
+            <label for="prix">prix</label>
+            <input type="number" class="form-control" name="prix" id="prix" [(ngModel)]="reparation.pu">
+       </div>
+
+       <div class="form-group">
+         <label for="enginID">select parc </label>
+         <select class="form-control" name="enginID" id="enginID" [(ngModel)]="engin">
+           <option value="{{e.idEngin}}" *ngFor="let e of engins"> {{ e.designation }} </option>
+         </select>
+       </div>
+
+           <p-footer>
+               <button type="button" pButton class="btn btn-primary " (click)="affecterReparation()" > <i class="fa fa-plus"></i> </button>
+             <button type="button" pButton class="btn btn-danger " (click)="showMainForm()" > <i class="fa fa-times"></i>  </button>
+         </p-footer>
+ </p-dialog>
+
+<p-dialog header="Ajouter Decompte " [(visible)]="decompteDialog" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+   <div class="form-group">
+        <label for="qte">quantite</label>
+        <input type="number" class="form-control" name="qte" id="qte" [(ngModel)]="qte">
+   </div>
+   <div class="form-group">
+     <label for="idOuvrage">select ouvrage</label>
+     <select class="form-control" name="idOuvrage" id="idOuvrage" [(ngModel)]="idOuvrage">
+       <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }} </option>
+     </select>
+   </div>
+       <p-footer>
+           <button type="button" pButton class="btn btn-primary " (click)="addDecompte()" > <i class="fa fa-plus"></i> </button>
+         <button type="button" pButton class="btn btn-danger " (click)="showMainForm()" > <i class="fa fa-times"></i>  </button>
+     </p-footer>
+</p-dialog>
+
+ <p-dialog header="Affecter Personne " [(visible)]="shows.s4" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+   [draggable]="false" [resizable]="false">
+    <h3>liste des personnes qui pas affectee</h3>
+    <p-table  [value]="allpersonnes"  [(selection)]="selectedCars2" >
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 3em"> <p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                <th> code_Personne</th>
+                <th> nom</th>
+                <th> prenom</th>
+                <th> fonction</th>
+                <th> salaire</th>
+            </tr>
+        </ng-template>
+         <ng-template pTemplate="body" let-p >
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="p" (click)="affecterPersonneToChantier(p[0])"></p-tableCheckbox>
+                </td>
+                     <td> {{ p[0] }} </td>
+                     <td> {{ p[1] }} </td>
+                     <td> {{ p[2] }} </td>
+                     <td> {{ p[3] }} </td>
+                     <td> {{ p[4] }} </td>
+                </tr>
+        </ng-template>
+           <ng-template pTemplate="summary">
+            <ul>
+                <li *ngFor="let p of selectedCars2" style="text-align: left">
+                    {{ p[1]+' - '+p[2]+' a ete effecte'}}
+                </li>
+            </ul>
+        </ng-template>
+    </p-table>
+
+          <p-footer>
+            <button type="button" pButton class="btn btn-danger " (click)="showMainForm()" ></button>
+        </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Affecter Achat materiel " [(visible)]="shows.s5" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+<div class="form-group">
+    <label for="prix"> prix </label>
+    <input type="number" name="prix" id="prix" [(ngModel)]="achatMatereil.prix" class="form-control">
+    <input type="hidden" value="achatChantier" name="achatChantier" id="achatChantier" [(ngModel)]="achatMatereil.type" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="qte"> qte </label>
+    <input type="number" name="qte" id="qte" [(ngModel)]="achatMatereil.qte" class="form-control">
+</div>
+
+<div class="form-group">
+<label for="materielId">choisir le materiel </label>
+<select class="form-control" name="materielId" id="materielId" [(ngModel)]="materielId">
+ <option value="{{m.idMateriel}}" *ngFor="let m of materiels" > {{m.designation}}  </option>
+</select>
+</div>
+
+       <p-footer>
+        <button type="button" pButton class="btn btn-primary " (click)="addAchatMatereil()" label="Save"></button>
+         <button type="button" pButton class="btn btn-danger " (click)="showMainForm()" label="Cancel" ></button>
+     </p-footer>
+</p-dialog>
+
+<p-dialog header="Affecter besoin traverses " [(visible)]="shows.s6" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+    <div class="form-group">
+         <label for="designation">designation</label>
+         <input type="text" class="form-control" name="designation" id="designation"[(ngModel)]="designation" >
+    </div>
+    <div class="form-group">
+            <label for="adress">adress</label>
+            <input type="text" class="form-control" name="adress" id="adress" [(ngModel)]="adresse">
+       </div>
+
+    <div class="form-group">
+        <label for="adress">Montant</label>
+        <input type="number" class="form-control" name="Montant" id="Montant" [(ngModel)]="montant">
+   </div>
+
+   <div class="form-group">
+        <label for="tel">tel</label>
+        <input type="text" class="form-control" name="tel" id="tel" [(ngModel)]="tel">
+   </div>
+
+   <div class="form-group">
+        <label for="type">type</label>
+        <input type="text" class="form-control" name="type" id="type" [(ngModel)]="type">
+   </div>
+
+       <p-footer>
+           <button type="button" pButton class="btn btn-primary " (click)="affecterBesoinsTravers()" > <i class="fa fa-plus"></i> </button>
+         <button type="button" pButton class="btn btn-danger " (click)="showMainForm()" > <i class="fa fa-times"></i>  </button>
+     </p-footer>
+</p-dialog>
+
+ <div *ngIf="shows.mainForm">
+ <p-tabView>
+        <p-tabPanel header="Avancement de chantier" leftIcon="pi pi-calendar">
+                <p-table #dtao [columns]="cols" [value]="avancementChantier" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+                   <ng-template pTemplate="header" let-columns>
+                       <tr>
+                           <th> designation</th>
+                           <th> unite</th>
+                           <th> date </th>
+                           <th> prix vente </th>
+                           <th> qte </th>
+                           <th> total </th>
+                            <th style="width:5em"></th>
+                       </tr>
+                   </ng-template>
+                   <ng-template pTemplate="body" let-o let-ri="rowIndex" let-columns="columns">
+                       <tr  style="text-align: center">
+                               <td>{{ o[0] }}</td>
+                               <td>{{ o[1] }}</td>
+                               <td>{{ o[2] | date }} </td>
+                               <td>{{ o[4] | number}}</td>
+                               <td>{{ o[5] | number}}</td>
+                               <td>{{ o[6] | number}} </td>
+
+                           <td>
+                           </td>
+                   </ng-template>
+                   <ng-template pTemplate="summary" class="text-primary" style="background-color: darkturquoise">
+                        <tr>
+                                <th colspan="2">Totale :</th>
+                                <th style="width: 60em"></th>
+                                <th colspan="10"> {{ getTotalArticles() | number }} </th>
+                        </tr>
+                        <tr>
+                                <th colspan="2">Tva : 20%</th>
+                                <th style="width: 60em"></th>
+                                <th colspan="10"> {{ getTotaTVA() | number }} </th>
+                       </tr>
+                       <tr>
+                                <th colspan="2">Total</th>
+                                <th style="width: 60em"></th>
+                                <th colspan="10"> {{ getTotalWithTVA() | number }} </th>
+                        </tr>
+
+                 </ng-template>
+               </p-table>
+         </p-tabPanel>
+
+        <p-tabPanel header="Besoins traverses" leftIcon="pi pi-user" rightIcon="pi pi-star">
+                <p-table #dtao [columns]="cols" [value]="besionsTravers" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th> idBT</th>
+                                <th> designation</th>
+                                <th> adresse</th>
+                                <th> tel</th>
+                                <th> type </th>
+                                <th> Montant </th>
+                                 <th style="width:5em"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-b let-ri="rowIndex" let-columns="columns">
+                            <tr  style="text-align: center">
+                                    <td>{{ b[0] }}</td>
+                                    <td>{{ b[1] }}</td>
+                                    <td>{{ b[2] }} </td>
+                                    <td>{{ b[3] }}</td>
+                                    <td>{{ b[4] }}</td>
+                                    <td>{{ b[5] }}</td>
+                                <td>
+                                </td>
+                                </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" class="text-primary" style="background-color: darkturquoise">
+                             <tr>
+                                     <th colspan="2">Totale :</th>
+                                     <th style="width: 60em"></th>
+                                     <th colspan="10"> {{ getTotalMontantBT() }} </th>
+                             </tr>
+                      </ng-template>
+                    </p-table>
+         </p-tabPanel>
+
+         <p-tabPanel header=" Personnels " leftIcon="pi pi-inbox">
+             <p-table #dtao [columns]="cols" [value]="personnes" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th> nom</th>
+                                <th> prenom</th>
+                                <th> tel</th>
+                                <th> qualification</th>
+                                <th> dateEm </th>
+                                <th> fonction </th>
+                                <th> cnss </th>
+                                <th> salaire </th>
+                                 <th style="width:5em" *ngIf="isAdmin()"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-p let-ri="rowIndex" let-columns="columns">
+                            <tr  style="text-align: center">
+                                    <td>{{ p.nom }}</td>
+                                    <td>{{ p.prenom }}</td>
+                                    <td>{{ p.tel }}</td>
+                                    <td>{{ p.qualification }} </td>
+                                    <td>{{ p.dateEm | date }}</td>
+                                    <td>{{ p.fonction }}</td>
+                                    <td>{{ p.cnss }}</td>
+                                    <td>{{ p.salaire }}</td>
+                                <td *ngIf="isAdmin()">
+                                    <button mwlConfirmationPopover
+                                            [popoverTitle]="popOverTitle"
+                                            [popoverMessage]="popOverMessage"
+                                            (confirm)="removePersonneFromChantier(p.idP)"
+                                            (cancel)="cancelClicked = true"
+                                            placement="left"
+                                            pButton class="btn btn-sm btn-danger" > <i class="fa fa-trash"></i>  </button>
+                                </td>
+                                </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" class="text-primary" >
+                             <tr>
+                                     <th colspan="2">Totale :</th>
+                                     <th style="width: 60em"></th>
+                                     <th colspan="10"> {{ getTotalPersonnes() }} </th>
+                             </tr>
+                      </ng-template>
+
+             </p-table>
+          </p-tabPanel>
+
+         <p-tabPanel header=" Reparation " leftIcon="pi pi-inbox">
+            <p-table #dtao [columns]="cols" [value]="reparations" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th> idR</th>
+                                <th> designation</th>
+                                <th> pu </th>
+                                <th> date</th>
+                                <th> engin </th>
+                                 <th style="width:5em"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-r let-ri="rowIndex" let-columns="columns">
+                            <tr  style="text-align: center">
+                                    <td>{{ r[0] }}</td>
+                                    <td>{{ r[1] }}</td>
+                                    <td>{{ r[2] }} </td>
+                                    <td>{{ r[3] }}</td>
+                                    <td>{{ r[4] }} </td>
+                                <td>
+                                </td>
+                                </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" class="text-primary" >
+                             <tr>
+                                     <th colspan="2">Totale :</th>
+                                     <th style="width: 60em"> {{ getTotalPricereparations() }} </th>
+                                     <th colspan="10"> {{ getTotalReaparation() }}  </th>
+                             </tr>
+                      </ng-template>
+
+            </p-table>
+         </p-tabPanel>
+
+         <p-tabPanel header="Materiels / Achats" leftIcon="pi pi-inbox">
+                <p-table #dtao [columns]="cols" [value]="achatmaterielChantier" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th> designation materiel</th>
+                                    <th> date </th>
+                                    <th> prix Unitaire </th>
+                                    <th> qte </th>
+                                    <th> total </th>
+                                    <th style="width:5em"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-a let-ri="rowIndex" let-columns="columns">
+                                <tr style="text-align: center">
+                                        <td>{{ a[4] }}</td>
+                                        <td>{{ a[1] }}</td>
+                                        <td>{{ a[2] }}</td>
+                                        <td>{{ a[3] }} </td>
+                                        <td>{{ a[5] }} </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" class="text-primary" >
+                                 <tr>
+                                         <th colspan="2">Totale :</th>
+                                         <th style="width: 60em"></th>
+                                         <th colspan="10"> {{ getTotalPriceMateriels() }} </th>
+                                 </tr>
+                          </ng-template>
+
+                </p-table>
+           </p-tabPanel>
+</p-tabView>
+</div>

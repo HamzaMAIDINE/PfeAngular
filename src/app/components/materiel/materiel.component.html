@@ -1,0 +1,109 @@
+<p-menubar [model]="items" ></p-menubar>
+
+<p-table #dtm [value]="catsWithMateriels" [columns]="cols" [resizableColumns]="true"
+scrollHeight="470px" [scrollable]="true" [responsive]="true" class="mt-5">
+     <ng-template pTemplate="caption">
+        <div style="text-align: center">
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="50" placeholder="rechercher" (input)="dtm.filterGlobal($event.target.value, 'contains')" style="width:200px">
+        </div>
+    </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 5em"></th>
+      <th>Designation</th>
+      <th>Prix</th>
+      <th>Categorie</th>
+      <th style="width: 5em"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-i="rowIndex" let-materiel>
+    <tr>
+      <td style="width: 5em">
+        {{ materiel.idMateriel }}</td>
+      <td >{{ materiel.designation }}</td>
+      <td >
+                  {{ materiel.prix }}
+      </td>
+      <td>
+        <ng-container *ngIf="materiel.categorieMateriel; else elseTemplate">
+            {{ materiel.categorieMateriel.designation }}
+        </ng-container>
+        <ng-template #elseTemplate>
+            null
+        </ng-template>
+        <!-- EditMatereil -->
+      </td>
+      <td *ngIf="isAdmin()" style="width: 5em">
+          <button class="btn btn-sm btn-warning" (click)="EditMatereil(materiel)" > <i class="fa fa-pencil"></i></button>
+          <button class="btn btn-sm btn-danger"
+                  mwlConfirmationPopover
+                  [popoverTitle]="popOverTitle"
+                  [popoverMessage]="popOverMessage"
+                  (confirm)="deleteMat(materiel.idMateriel)"
+                  (cancel)="cancelClicked = true"
+                  placement="left"> <i class="fa fa-trash"></i></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog header="Ajouter Category " [(visible)]="displayCategory" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="categoryName">category Name</label>
+            <input type="text" name="categoryName" id="categoryName" [(ngModel)]="categoryName" class="form-control">
+          </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)="AddCategory()" > <i class="fa fa-plus"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayCategory=false"> <i class="fa fa-times"></i>  </button>
+        </p-footer>
+</p-dialog>
+
+<p-dialog header="Ajouter Materiel " [(visible)]="displayMateriel" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="categorie_id_categorie" >select category </label>
+            <select class="form-control" name="categorie_id_categorie"  id="categorie_id_categorie" [(ngModel)]="materiel.categorie">
+              <option value="{{c.idCM}}" *ngFor="let c of categories"> {{ c.designation }} </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="designation"> designation </label>
+            <input type="text" name="designation" id="designation" [(ngModel)]="materiel.designation" class="form-control">
+          </div>
+            <div class="form-group">
+                <label for="prix">Prix unitaire </label>
+                <input type="number" name="prix" id="prix" [(ngModel)]="materiel.prix" class="form-control">
+              </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)="AddMateriel()" > <i class="fa fa-plus"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayMateriel=false"> <i class="fa fa-times"></i>  </button>
+        </p-footer>
+</p-dialog>
+
+
+<p-dialog header="editer Materiel " [(visible)]="displayMaterielEdit" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="categorie_id_categorie" >select category </label>
+            <select class="form-control" name="categorie_id_categorie"  id="categorie_id_categorie" [(ngModel)]="materiel.categorie">
+              <option value="{{c.idCM}}" *ngFor="let c of categories"> {{ c.designation }} </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="designation"> designation </label>
+            <input type="text" name="designation" id="designation" [(ngModel)]="materiel.designation" class="form-control">
+          </div>
+            <div class="form-group">
+                <label for="prix">Prix unitaire </label>
+                <input type="number" name="prix" id="prix" [(ngModel)]="materiel.prix" class="form-control">
+              </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)="updateMatereil()" > <i class="fa fa-pencil"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayMaterielEdit=false"> <i class="fa fa-times"></i>  </button>
+        </p-footer>
+</p-dialog>

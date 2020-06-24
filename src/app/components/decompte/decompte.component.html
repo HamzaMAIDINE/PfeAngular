@@ -1,0 +1,63 @@
+<p-menubar [model]="items"></p-menubar>
+
+<p-table #dtao  [value]="decomptes" [responsive]="true" selectionMode="single" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="caption">
+            <div style="text-align: center">        
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="rechercher" (input)="dtao.filterGlobal($event.target.value, 'contains')" style="width:200px">
+            </div>
+    </ng-template>
+    <ng-template pTemplate="header" >
+        <tr>
+            <th style="width: -5vw"> code </th> 
+            <th> designation </th> 
+            <th> unite </th> 
+            <th> prix unitaire </th> 
+            <th> prix vente  </th> 
+            <th>Quantite </th> 
+             <th>date </th>
+             <th>chantier </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-d let-ri="rowIndex" >
+        <tr style="text-align: center">
+                <td>{{ d[0] }} </td> 
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td>{{ d[3] | number }}</td>
+                <td>{{ d[4] | number }}</td>
+                <td>{{ d[5] | number }}</td>
+                <td>{{ d[6] | date }}</td>            
+                <td>{{ d[7] }}</td>            
+            <td>
+            </td>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+    </ng-template>    
+</p-table> 
+
+ <p-dialog header="Ajouter Chantier " [(visible)]="displayDecompte" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+  <div class="form-group">
+        <label for="chantierId"> chantiers </label>
+        <select class="form-control" name="chantierId" id="chantierId" [(ngModel)]="chantierId">
+            <option value="{{a.numCh}}" *ngFor="let a of chantiers"> {{ a.numCh }} </option>
+        </select>
+</div>
+
+<div class="form-group">
+        <label for="qte"> Quantite </label>
+        <input type="number" class="form-control" name="qte" id="qte" [(ngModel)]="decompte.qte">
+</div>
+
+<div class="form-group">
+        <label for="ouvrageId">Ouvrage </label>
+        <select class="form-control" name="ouvrageId" id="ouvrageId" [(ngModel)]="ouvrageId">
+            <option value="{{o.idOuvrage}}" *ngFor="let o of ouvrages"> {{ o.designation }}  </option>
+        </select>
+</div>
+<p-footer>
+        <button type="button" pButton class="btn btn-primary " (click)="AddDecompte()" > <i class="fa fa-plus"></i> </button>  
+        <button type="button" pButton class="btn btn-danger " (click)="displayDecompte=false"> <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>

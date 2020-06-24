@@ -1,0 +1,118 @@
+<p-menubar [model]="items">
+   <button  pButton label="Logout" class="btn btn-primary btn-sm" (click)="refresh()" style="margin-left:.25em">
+        <i class="fa fa-refresh" ></i>
+ </button>
+</p-menubar>
+
+<p-accordion>
+     <p-accordionTab *ngFor="let c of catOuvrages"  header="{{ c.designation }}" >
+         <div class="badge badge-primary text-center">List des Ouvrages</div>
+            <table class="table  table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>designation</th>
+                        <th>unite</th>
+                        <th>prix unitaire</th>
+                        <th>prix vente</th>
+                        <th *ngIf="isAdmin()">actions </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let o of c.ouvrages">
+                        <td> {{ o.designation }} </td>
+                        <td> {{ o.unite }} </td>
+                        <td> {{ o.prixU }} </td>
+                        <td> {{ o.prixV }} </td>
+                        <td *ngIf="isAdmin()">
+                            <button class="btn btn-sm btn-warning" (click)="editOuvrage(o)"><i class="fa fa-pencil" ></i></button>
+                            <button mwlConfirmationPopover
+                                    [popoverTitle]="popOverTitle"
+                                    [popoverMessage]="popOverMessage"
+                                    (confirm)="deleteOuvrage(o.idOuvrage)"
+                                    (cancel)="cancelClicked = true"
+                                    placement="left"
+                                    class="btn btn-sm btn-danger"><i class="fa fa-trash" ></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </p-accordionTab>
+</p-accordion>
+
+
+<p-dialog header="Ajouter Category " [(visible)]="displayCategory" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="categoryName">category Name</label>
+            <input type="text" name="categoryName" id="categoryName" [(ngModel)]=" categoryName " class="form-control">
+          </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)=" AddCategory() " > <i class="fa fa-plus"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayCategory=false"> <i class="fa fa-times"></i>  </button>
+        </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Ajouter Ouvrage " [(visible)]="displayOuvrage" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <div class="form-group">
+            <label for="categorie_id_categorie" >select category </label>
+            <select class="form-control" name="categorie_id_categorie"  id="categorie_id_categorie" [(ngModel)]="categorieId">
+              <option value="{{c.idCategorie}}" *ngFor="let c of categories"> {{ c.designation }} </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="designation"> designation </label>
+            <input type="text" name="designation" id="designation" [(ngModel)]="ouvrage.designation" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="unite">unite</label>
+              <input type="text" name="unite" id="unite" [(ngModel)]="ouvrage.unite" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="prixU">Prix unitaire </label>
+                <input type="number" name="prixU" id="prixU" [(ngModel)]="ouvrage.prixU" class="form-control">
+              </div>
+              <div class="form-group">
+                  <label for="prixV"> Prix vente</label>
+                  <input type="number" name="prixV" id="prixV" [(ngModel)]="ouvrage.prixV" class="form-control">
+                </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-primary " (click)="AddOuvrage()" > <i class="fa fa-plus"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayOuvrage=false" > <i class="fa fa-times"></i> </button>
+        </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Editer Ouvrage " [(visible)]="displayOuvrageEdit" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+          <!-- <div class="form-group">
+            <label for="categorie_id_categorie" >select category </label>
+            <select class="form-control" name="categorie_id_categorie"  id="categorie_id_categorie" [(ngModel)]="categorieId">
+              <option value="{{c.idCategorie}}" *ngFor="let c of categories"> {{ c.designation }} </option>
+            </select>
+          </div> -->
+          <div class="form-group">
+            <label for="designation"> designation </label>
+            <input type="text" name="designation" id="designation" [(ngModel)]="ouvrage.designation" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="unite">unite</label>
+              <input type="text" name="unite" id="unite" [(ngModel)]="ouvrage.unite" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="prixU">Prix unitaire </label>
+                <input type="number" name="prixU" id="prixU" [(ngModel)]="ouvrage.prixU" class="form-control">
+              </div>
+              <div class="form-group">
+                  <label for="prixV"> Prix vente</label>
+                  <input type="number" name="prixV" id="prixV" [(ngModel)]="ouvrage.prixV" class="form-control">
+                </div>
+          <p-footer>
+            <button type="button" pButton class="btn btn-warning " (click)="updateOuvrage()" > <i class="fa fa-pencil"></i> </button>
+            <button type="button" pButton class="btn btn-danger " (click)="displayOuvrageEdit=false" > <i class="fa fa-times"></i> </button>
+        </p-footer>
+</p-dialog>

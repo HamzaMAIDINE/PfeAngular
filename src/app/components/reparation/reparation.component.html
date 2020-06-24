@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-4 offset-4">
+            <p-menubar [model]="items" ></p-menubar>
+    </div>
+</div>
+<p-table #dtp [columns]="cols" [value]="reparations" [resizableColumns]="true"
+ scrollHeight="470px" [scrollable]="true" [responsive]="true">
+      <ng-template pTemplate="caption">
+        <div style="text-align: center">        
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="50" placeholder="rechercher" 
+            (input)="dtp.filterGlobal($event.target.value, 'contains')" style="width:200px">
+        </div>
+    </ng-template>  
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:5em"></th>
+        <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" 
+          ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+        </th>
+        <th style="width:5em"></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th *ngFor="let col of cols" [ngSwitch]="col.field" class="ui-fluid">
+            <input pInputText type="text" (input)="dtp.filter($event.target.value, col.field, col.filterMatchMode)"
+             [value]="dtp.filters[col.field]?.value">
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-r let-ri="rowIndex">
+      <tr style="text-align:center">
+        <td style="width:5em">{{ r[0] }}</td>
+        <td>{{ r[1] }}</td>
+        <td>{{ r[2] | date }}</td>
+        <td>{{ r[3] | number}}</td>
+        <td>{{ r[4] }} </td>
+        <td>{{ r[5] }} </td>
+        <td style="width:5em" *ngIf="isAdmin()">              
+          <button pButton class="btn btn-sm btn-warning" (click)="editReparation(r)" > <i class="fa fa-pencil" ></i></button>
+          <button pButton class="btn btn-sm btn-danger" (click)="deleteReparation(r[0])"> <i class="fa fa-trash" ></i></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary"></ng-template>
+</p-table>
+
+<p-dialog header="Ajouter reparation " [(visible)]="reparationDialog" [modal]="true" [style]="{width: '55vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+ 
+      <div class="form-group">
+             <label for="designation"> designation </label>
+             <input type="text" name="designation" id="designation" [(ngModel)]="reparation.designation" class="form-control">
+      </div>
+ 
+      <div class="form-group">
+             <label for="pu"> prix  </label>
+             <input type="number" name="pu" id="pu" [(ngModel)]="reparation.pu" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="engin"> select Engin </label>
+        <select class="form-control" name="engin" id="engin" [(ngModel)]="enginID">
+          <option value="{{e.idEngin}}" *ngFor="let e of engins"> {{ e.designation }} </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="numCh"> select chantier </label>
+        <select class="form-control" name="numCh" id="numCh" [(ngModel)]="chantierId">
+          <option value="{{c.numCh}}" *ngFor="let c of chantiers"> {{ c.numCh }} </option>
+        </select>
+      </div>
+
+      <p-footer>
+        
+        <button type="button" pButton class="btn btn-primary " icon="pi pi-pencil" class="ui-button-info" (click)="AddReparation()" > <i class="fa fa-plus"></i> </button>
+        <button type="button" pButton class="btn btn-danger " icon="pi pi-times" (click)="reparationDialog=false"> <i class="fa fa-times"></i>  </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Editer reparation " [(visible)]="displayReparationEdit" [modal]="true" [style]="{width: '55vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+ 
+      <div class="form-group">
+             <label for="designation"> designation </label>
+             <input type="text" name="designation" id="designation" [(ngModel)]="reparation.designation" class="form-control">
+      </div>
+ 
+      <div class="form-group">
+             <label for="pu"> prix  </label>
+             <input type="number" name="pu" id="pu" [(ngModel)]="reparation.pu" class="form-control">
+      </div>
+
+      <p-footer> 
+        <button type="button" pButton class="btn btn-warning " (click)="updateAppelOffre()" > <i class="fa fa-pencil"></i> </button>
+        <button type="button" pButton class="btn btn-danger "  (click)="displayReparationEdit=false"> <i class="fa fa-times"></i>  </button>
+    </p-footer>
+
+</p-dialog>
